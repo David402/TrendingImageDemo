@@ -31,11 +31,12 @@ class SearchRepository(private val assets: AssetManager,
     private val TAG = "Search Repository"
     val githubService = GithubServiceBuilder.buildService(GithubServices::class.java)
 
-    override suspend fun performSearch(query: String): List<User> {
-        return searchGithubUsers(query)
+    override suspend fun performSearch(query: String): List<User> = withContext(Dispatchers.IO) {
+        val users = searchGithubUsers(query)
+        getUserInfo(users)
     }
 
-    private suspend fun searchGithubUsers(query: String): List<User> {
+    private suspend fun searchGithubUsers(query: String): List<GithubUser> {
         Log.d(TAG, "search user - $query")
         return withContext(Dispatchers.IO) {
             val call = githubService.searchUsers(query, 10)
@@ -47,23 +48,23 @@ class SearchRepository(private val assets: AssetManager,
             }
             Log.d(TAG,"API call successful")
             Log.d(TAG,"res.body() - ${response.body()}")
-            val result = response.body()?.items?.map {
-                user ->
-                withContext(Dispatchers.IO) {
-                    val call = githubService.getUserInfo(user.login)
-                    val response = call.execute()
-                    if (!response.isSuccessful) {
-                        Log.d(TAG,"(2) API call failed - code=${response.code()}, message: ${response.message()}")
-                        User(user.login, user.avatar_url, -1)
-                    }
-                    val result: UserInfoResult = response.body()!!
-                    Log.d(TAG,"(2) API call successful")
-                    Log.d(TAG,"(2) res.body() - ${response.body()}")
-                    User(result?.login, result?.avatar_url, result?.public_repos)
-                }
-            }
+            val result = response.body()?.items
             result?: emptyList()
         }
     }
 
+    private suspend fun getUserInfo(users: List<GithubUser>): List<User> = users?.map { user ->
+        withContext(Dispatchers.IO) {
+            val call = githubService.getUserInfo(user.login)
+            val response = call.execute()
+            if (!response.isSuccessful) {
+                Log.d(TAG,"(2) API call failed - code=${response.code()}, message: ${response.message()}")
+                User(user.login, user.avatar_url, -1)
+            }
+            val result: UserInfoResult = response.body()!!
+            Log.d(TAG,"(2) API call successful")
+            Log.d(TAG,"(2) res.body() - ${response.body()}")
+            User(result?.login, result?.avatar_url, result?.public_repos)
+        }
+    }
 }
