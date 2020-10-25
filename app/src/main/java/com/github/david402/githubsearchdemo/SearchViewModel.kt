@@ -1,6 +1,5 @@
 package com.github.david402.githubsearchdemo
 
-import android.content.res.AssetManager
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,22 +1,9 @@
 package com.github.david402.githubsearchdemo
 
-import android.content.res.AssetManager
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.net.UnknownHostException
 import java.util.stream.Collectors
-import kotlin.random.Random
 
 interface SearchApi {
     suspend fun performSearch(query: String): List<User>
