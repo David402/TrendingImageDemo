@@ -25,7 +25,7 @@ class SearchViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     companion object {
-        const val SEARCH_DELAY_MS = 500L
+        const val SEARCH_DELAY_MS = 200L
         const val MIN_QUERY_LENGTH = 3
     }
 

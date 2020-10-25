@@ -15,6 +15,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.UnknownHostException
+import java.util.stream.Collectors
 import kotlin.random.Random
 
 interface SearchApi {
@@ -51,8 +52,7 @@ class SearchRepository() : SearchApi {
         }
     }
 
-    private suspend fun getUserInfo(users: List<GithubUser>): List<User> = users?.map { user ->
-        withContext(Dispatchers.IO) {
+    private suspend fun getUserInfo(users: List<GithubUser>): List<User> = users.parallelStream().map { user ->
             val call = githubService.getUserInfo(user.login)
             val response = call.execute()
             if (!response.isSuccessful) {
@@ -63,6 +63,6 @@ class SearchRepository() : SearchApi {
             Log.d(TAG,"(2) API call successful")
             Log.d(TAG,"(2) res.body() - ${response.body()}")
             User(result?.login, result?.avatar_url, result?.public_repos)
-        }
-    }
+
+    }.collect(Collectors.toList())
 }
