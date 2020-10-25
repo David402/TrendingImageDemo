@@ -21,25 +21,23 @@ interface SearchApi {
     suspend fun performSearch(query: String): List<User>
 }
 
-class SearchRepository(private val assets: AssetManager,
-                       private val maxResult: Int = DEFAULT_RESULT_MAX_SIZE) : SearchApi {
+class SearchRepository() : SearchApi {
     companion object {
-        private const val DEFAULT_RESULT_MAX_SIZE = 250
-        private const val RANDOM_ERROR_THRESHOLD = 0.75
+        private const val DEFAULT_RESULT_MAX_SIZE = 10
     }
 
     private val TAG = "Search Repository"
-    val githubService = GithubServiceBuilder.buildService(GithubServices::class.java)
+    private val githubService = GithubServiceBuilder.buildService(GithubServices::class.java)
 
     override suspend fun performSearch(query: String): List<User> = withContext(Dispatchers.IO) {
         val users = searchGithubUsers(query)
         getUserInfo(users)
     }
 
-    private suspend fun searchGithubUsers(query: String): List<GithubUser> {
+    private suspend fun searchGithubUsers(query: String, size: Int = DEFAULT_RESULT_MAX_SIZE): List<GithubUser> {
         Log.d(TAG, "search user - $query")
         return withContext(Dispatchers.IO) {
-            val call = githubService.searchUsers(query, 10)
+            val call = githubService.searchUsers(query, size)
             Log.d(TAG,"API call - " + call.request().toString())
             val response = call.execute()
             if (!response.isSuccessful) {

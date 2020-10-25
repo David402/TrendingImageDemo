@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val searchAdapter = SearchAdapter()
 
     private val viewModel: SearchViewModel by viewModels {
-        SearchViewModel.Factory(assets, Dispatchers.IO)
+        SearchViewModel.Factory(Dispatchers.IO)
     }
 
     @FlowPreview
