@@ -81,12 +81,10 @@ class MainActivity : AppCompatActivity() {
                 binding.otherResultText.setText(R.string.not_enough_characters)
             }
             is RateLimitError -> {
-                println("Github API Rate Limit Hit!")
-                Toast.makeText(
-                    this,
-                    "Github API Rate Limit Hit! Please try after a couple of minutes.",
-                    Toast.LENGTH_LONG
-                ).show()
+                searchAdapter.submitList(emptyList())
+                binding.otherResultText.visibility = View.VISIBLE
+                binding.searchResult.visibility = View.GONE
+                binding.otherResultText.setText(R.string.search_rate_limit_error)
             }
             is TerminalError -> {
                 // Something wen't terribly wrong!

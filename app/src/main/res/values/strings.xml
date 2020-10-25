@@ -4,4 +4,5 @@
     <string name="not_enough_characters">Query must be at least 3 characters</string>
     <string name="search_error">Error when searching</string>
     <string name="search_query_hint">Enter search here ...</string>
-</resources>
+    <string name="search_rate_limit_error">Github API Rate Limit Hit! \nPlease try after a couple of minutes.</string>
+    </resources>
