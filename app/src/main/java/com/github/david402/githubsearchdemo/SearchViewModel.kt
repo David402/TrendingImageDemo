@@ -1,5 +1,6 @@
 package com.github.david402.githubsearchdemo
 
+import android.accounts.NetworkErrorException
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -18,13 +19,14 @@ object EmptyResult : SearchResult()
 object EmptyQuery : SearchResult()
 class ErrorResult(val e: Throwable) : SearchResult()
 object TerminalError : SearchResult()
+class RateLimitError(val e: Throwable) : SearchResult()
 
 class SearchViewModel(
     private val searchApi: SearchApi,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     companion object {
-        const val SEARCH_DELAY_MS = 200L
+        const val SEARCH_DELAY_MS = 100L
         const val MIN_QUERY_LENGTH = 3
     }
 
@@ -58,6 +60,9 @@ class SearchViewModel(
                 if (e is CancellationException) {
                     println("Search was cancelled!")
                     throw e
+                } else if (e is NetworkErrorException) {
+                    println("Search rate limit exceeded!")
+                    RateLimitError(e)
                 } else {
                     ErrorResult(e)
                 }

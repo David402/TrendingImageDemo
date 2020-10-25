@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         binding.searchResult.visibility = View.GONE
         binding.otherResultText.setText(R.string.not_enough_characters)
         binding.searchText.requestFocus()
-        var searchText = binding.searchText as TextView
 
         binding.searchText.doAfterTextChanged { editable ->
             lifecycleScope.launch {
@@ -80,6 +79,14 @@ class MainActivity : AppCompatActivity() {
                 binding.otherResultText.visibility = View.VISIBLE
                 binding.searchResult.visibility = View.GONE
                 binding.otherResultText.setText(R.string.not_enough_characters)
+            }
+            is RateLimitError -> {
+                println("Github API Rate Limit Hit!")
+                Toast.makeText(
+                    this,
+                    "Github API Rate Limit Hit! Please try after a couple of minutes.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             is TerminalError -> {
                 // Something wen't terribly wrong!

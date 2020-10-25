@@ -1,5 +1,6 @@
 package com.github.david402.githubsearchdemo
 
+import android.accounts.NetworkErrorException
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,6 +32,7 @@ class SearchRepository() : SearchApi {
             if (!response.isSuccessful) {
                 Log.d(TAG,"API call failed")
                 Log.d(TAG, "code: " + response.code() + ", message: " + response.message())
+                throw NetworkErrorException("Github API Rate Limit Hits.")
             }
             Log.d(TAG,"API call successful")
             Log.d(TAG,"res.body() - ${response.body()}")
