@@ -70,8 +70,8 @@ class SearchRepository() : SearchApi {
             )
             throw NetworkErrorException("Github API Rate Limit Hits.")
         }
-        val result: UserInfoResult = response.body()!!
-        User(result?.login, result?.avatar_url, result?.public_repos)
+        val result: UserInfoResult? = response.body()
+        User(result?.login!!, result?.avatar_url!!, result?.public_repos!!)
     }.collect(Collectors.toList())
 
     inline fun measureTimeMillis(block: () -> Unit): Long {
