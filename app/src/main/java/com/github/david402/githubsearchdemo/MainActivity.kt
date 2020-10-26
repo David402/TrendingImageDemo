@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         binding.searchText.requestFocus()
 
         binding.searchText.doAfterTextChanged { editable ->
+            binding.progressHorizontal.visibility = View.VISIBLE
             lifecycleScope.launch {
                 viewModel.queryChannel.send(editable.toString())
             }
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
+        binding.progressHorizontal.visibility = View.GONE
     }
 
     class SearchAdapter : ListAdapter<User, SearchViewHolder>(DIFF_CALLBACK) {

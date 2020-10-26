@@ -35,6 +35,19 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Search query..." />
 
+        <ProgressBar
+            android:id="@+id/progress_horizontal"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorAccent"
+            android:indeterminateTintMode="src_atop"
+            android:minHeight="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/searchText"
+            app:layout_constraintEnd_toEndOf="@+id/searchText"
+            app:layout_constraintStart_toStartOf="@+id/searchText" />
+
         <TextView
             android:id="@+id/otherResultText"
             android:layout_width="0dp"
