@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 .with(context)
                 .load(user.avatarUrl)
                 .centerCrop()
-                .placeholder(R.drawable.user_small)
+                .placeholder(R.drawable.user_profile_placeholder)
                 .into(binding.userAvatar)
             binding.resultText.text = "${user.name} (${user.publicRepos})"
         }
