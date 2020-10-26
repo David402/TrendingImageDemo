@@ -11,12 +11,12 @@ interface SearchApi {
     suspend fun performSearch(query: String, size: Int): List<User>
 }
 
-class SearchRepository() : SearchApi {
+class SearchRepository : SearchApi {
     companion object {
         private const val TAG = "Search Repository"
         private const val DEFAULT_RESULT_MAX_SIZE = 10
     }
-    
+
     private val githubService = GithubServiceBuilder.buildService(GithubServices::class.java)
 
     /**
