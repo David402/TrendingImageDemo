@@ -1,14 +1,13 @@
 package com.github.david402.githubsearchdemo
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.searchResult.adapter = searchAdapter
-        viewModel.searchResult.observe(this) { handleSearchResult(it) }
+//        viewModel.searchResult.observe(this) { handleSearchResult(it) }
 
         // Start with empty query view
         searchAdapter.submitList(emptyList())
@@ -49,11 +48,30 @@ class MainActivity : AppCompatActivity() {
         binding.searchText.requestFocus()
 
         binding.searchText.doAfterTextChanged { editable ->
-            binding.progressHorizontal.visibility = View.VISIBLE
+//            binding.progressHorizontal.visibility = View.VISIBLE
             lifecycleScope.launch {
                 viewModel.queryChannel.send(editable.toString())
             }
         }
+
+        viewModel.items.observe(this) {
+            if (it.isNotEmpty()) {
+                binding.otherResultText.visibility = View.GONE
+                binding.searchResult.visibility = View.VISIBLE
+            } else {
+                binding.searchResult.visibility = View.GONE
+                binding.otherResultText.setText(R.string.empty_result)
+            }
+            searchAdapter.submitList(it)
+        }
+        viewModel.dataLoading.observe(this) { isDownloading ->
+            if (isDownloading) {
+                binding.progressHorizontal.visibility = View.VISIBLE
+            } else {
+                binding.progressHorizontal.visibility = View.GONE
+            }
+        }
+        viewModel.refresh()
     }
 
     private fun handleSearchResult(it: SearchResult) {
@@ -98,10 +116,9 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
-        binding.progressHorizontal.visibility = View.GONE
     }
 
-    class SearchAdapter : ListAdapter<User, SearchViewHolder>(DIFF_CALLBACK) {
+    class SearchAdapter : ListAdapter<GifObject, SearchViewHolder>(DIFF_CALLBACK) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = SearchItemBinding.inflate(layoutInflater, parent, false)
@@ -110,14 +127,20 @@ class MainActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
             holder.bind(holder.context, getItem(position))
+            holder.itemView.setOnClickListener( object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    Toast.makeText(v?.context, "CLICKED!!!!!", Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
 
         companion object {
-            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<User>() {
-                override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
+            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<GifObject>() {
+                override fun areItemsTheSame(oldItem: GifObject, newItem: GifObject): Boolean =
                     oldItem == newItem
 
-                override fun areContentsTheSame(oldItem: User, newItem: User): Boolean =
+                override fun areContentsTheSame(oldItem: GifObject, newItem: GifObject): Boolean =
                     oldItem == newItem
             }
         }
@@ -125,14 +148,14 @@ class MainActivity : AppCompatActivity() {
 
     class SearchViewHolder(val context: Context, private val binding: SearchItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(context: Context, user: User) {
+        fun bind(context: Context, gif: GifObject) {
             Glide
                 .with(context)
-                .load(user.avatarUrl)
+                .load(gif.images.downsized.url)
                 .centerCrop()
                 .placeholder(R.drawable.user_profile_placeholder)
-                .into(binding.userAvatar)
-            binding.resultText.text = "${user.name} (${user.publicRepos})"
+                .into(binding.image)
+            binding.title.text = gif.title
         }
     }
 }
