@@ -3,6 +3,7 @@ package com.github.david402.githubsearchdemo
 import android.accounts.NetworkErrorException
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
+import com.github.david402.githubsearchdemo.data.GifObject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +21,7 @@ object TerminalError : SearchResult()
 class RateLimitError(val e: Throwable) : SearchResult()
 
 class SearchViewModel(
-    private val searchRepository: SearchRepository,
+    private val giphyRepository: GiphyRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     companion object {
@@ -34,11 +35,11 @@ class SearchViewModel(
             _dataLoading.value = true
 
             viewModelScope.launch {
-                searchRepository.updateTrendingGifs()
+                giphyRepository.updateTrendingGifs()
                 _dataLoading.value = false
             }
         }
-        searchRepository.obeserveGifs()
+        giphyRepository.observeGifs()
     }
 
 
@@ -46,6 +47,8 @@ class SearchViewModel(
 
     private val _dataLoading = MutableLiveData<Boolean>(false)
     val dataLoading: LiveData<Boolean> = _dataLoading
+    private val _openGifEvent = MutableLiveData<Event<String>>()
+    val openGifEvent: LiveData<Event<String>> = _openGifEvent
 
     @ExperimentalCoroutinesApi
     @VisibleForTesting
@@ -53,6 +56,10 @@ class SearchViewModel(
 
     fun refresh() {
         _forceUpdate.value = true
+    }
+
+    fun selectGif(id: String) {
+        _openGifEvent.value = Event(id)
     }
 
     @FlowPreview
@@ -65,7 +72,7 @@ class SearchViewModel(
             try {
                 if (it.length >= MIN_QUERY_LENGTH) {
                     withContext(ioDispatcher) {
-                        searchRepository.searchGifs(it)
+                        giphyRepository.searchGifs(it)
                     }
 //                    println("Search result: ${searchResult.size} hits")
 
@@ -97,13 +104,5 @@ class SearchViewModel(
 
     fun handleSearchResult(items: List<GifObject>) {
 
-    }
-
-    class Factory(private val dispatcher: CoroutineDispatcher) :
-        ViewModelProvider.NewInstanceFactory() {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SearchViewModel(SearchRepository(), dispatcher) as T
-        }
     }
 }

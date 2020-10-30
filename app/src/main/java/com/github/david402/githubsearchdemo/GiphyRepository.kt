@@ -1,7 +1,9 @@
 package com.github.david402.githubsearchdemo
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.github.david402.githubsearchdemo.data.GifObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -10,7 +12,7 @@ interface SearchApi {
     suspend fun performSearch(query: String, size: Int): List<User>
 }
 
-class SearchRepository {
+class GiphyRepository {
     companion object {
         private const val TAG = "Search Repository"
         private const val DEFAULT_RESULT_MAX_SIZE = 10
@@ -43,12 +45,18 @@ class SearchRepository {
 //        println("API call time elapsed: $elapsed")
 //        result
 //    }
-    private val gifs: MutableLiveData<List<GifObject>> = MutableLiveData()
+    private val _gifs: MutableLiveData<List<GifObject>> = MutableLiveData()
+    private val _selectedGif: MutableLiveData<GifObject> = MutableLiveData()
 
-    fun obeserveGifs() = gifs
+    fun observeGifs() = _gifs
+    fun observeGif(id: String): LiveData<GifObject> = run {
+        val gif = _gifs.value?.find { it.id == id }
+        _selectedGif.value = gif
+        _selectedGif
+    }
 
     suspend fun updateTrendingGifs() {
-        gifs.value =  withContext(Dispatchers.IO) {
+        _gifs.value =  withContext(Dispatchers.IO) {
             val call = giphyService.getTrendingGifs()
             val response = call.execute()
             if (!response.isSuccessful) {
@@ -61,7 +69,7 @@ class SearchRepository {
     }
 
     suspend fun searchGifs(query: String) {
-        gifs.value = withContext(Dispatchers.IO) {
+        _gifs.value = withContext(Dispatchers.IO) {
             val call = giphyService.searchGifs(query)
             val response = call.execute()
             if (!response.isSuccessful) {
