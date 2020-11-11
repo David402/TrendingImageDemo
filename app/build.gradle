@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "30.0.2"
     defaultConfig {
-        applicationId "com.github.david402.githubsearchdemo"
+        applicationId "com.github.david402.giphydemo"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1

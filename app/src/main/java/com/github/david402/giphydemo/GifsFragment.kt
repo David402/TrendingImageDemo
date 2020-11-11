@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import android.content.Context
 import android.os.Bundle
@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.github.david402.githubsearchdemo.data.GifObject
-import com.github.david402.githubsearchdemo.databinding.SearchItemBinding
-import com.github.david402.githubsearchdemo.databinding.TrendingGifFragBinding
-import com.github.david402.githubsearchdemo.util.getViewModelFactory
+import com.github.david402.giphydemo.data.GifObject
+import com.github.david402.giphydemo.databinding.SearchItemBinding
+import com.github.david402.giphydemo.databinding.TrendingGifFragBinding
+import com.github.david402.giphydemo.util.getViewModelFactory
 import kotlinx.coroutines.launch
 
 class GifsFragment : Fragment() {
@@ -39,7 +39,7 @@ class GifsFragment : Fragment() {
             viewmodel = viewModel
         }
         setHasOptionsMenu(true)
-        viewModel.searchResult.observe(this) { handleSearchResult(it) }
+//        viewModel.searchResult.observe(this) { handleSearchResult(it) }
 
         // Start with empty query view
 //        searchAdapter.submitList(emptyList())

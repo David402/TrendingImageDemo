@@ -1,7 +1,7 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import androidx.lifecycle.*
-import com.github.david402.githubsearchdemo.data.GifObject
+import com.github.david402.giphydemo.data.GifObject
 
 class GifDetailsViewModel(
     private val giphyRepository: GiphyRepository

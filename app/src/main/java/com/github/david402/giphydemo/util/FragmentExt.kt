@@ -1,8 +1,8 @@
-package com.github.david402.githubsearchdemo.util
+package com.github.david402.giphydemo.util
 
 import androidx.fragment.app.Fragment
-import com.github.david402.githubsearchdemo.GiphyApplication
-import com.github.david402.githubsearchdemo.ViewModelFactory
+import com.github.david402.giphydemo.GiphyApplication
+import com.github.david402.giphydemo.ViewModelFactory
 
 fun Fragment.getViewModelFactory(): ViewModelFactory {
     val repository = (requireContext().applicationContext as GiphyApplication).giphyRepository

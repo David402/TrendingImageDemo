@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.github.david402.githubsearchdemo.databinding.GifDetailsFrgBinding
-import com.github.david402.githubsearchdemo.util.getViewModelFactory
+import com.github.david402.giphydemo.databinding.GifDetailsFrgBinding
+import com.github.david402.giphydemo.util.getViewModelFactory
 
 class GifDetailsFragment : Fragment() {
     private lateinit var viewDataBinding: GifDetailsFrgBinding

@@ -11,7 +11,7 @@
 
         <variable
             name="viewmodel"
-            type="com.github.david402.githubsearchdemo.GifDetailsViewModel" />
+            type="com.github.david402.giphydemo.GifDetailsViewModel" />
     </data>
 
     <LinearLayout

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 
 import androidx.lifecycle.Observer

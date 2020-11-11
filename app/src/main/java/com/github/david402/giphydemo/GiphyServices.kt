@@ -1,7 +1,5 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
-import com.github.david402.githubsearchdemo.data.GifObject
-import com.github.david402.githubsearchdemo.data.ImageObject
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -9,13 +7,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import com.github.david402.githubsearchdemo.data.Result as Result
+import com.github.david402.giphydemo.data.Result as Result
 
 interface GiphyServices {
     @GET("/v1/gifs/trending")
     fun getTrendingGifs(@Query("api_key") text: String = Configs.API_KEY): Call<Result>
     @GET("/v1/gifs/search")
-    fun searchGifs(@Path ("q") query: String): Call<Result>
+    fun searchGifs(@Query ("q") query: String, @Query("api_key") text: String = Configs.API_KEY): Call<Result>
 }
 
 data class GithubUser (

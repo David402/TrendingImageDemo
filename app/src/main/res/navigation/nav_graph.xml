@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/gifs_fragment_dest"
-        android:name="com.github.david402.githubsearchdemo.GifsFragment"
+        android:name="com.github.david402.giphydemo.GifsFragment"
         android:label="Gif List">
         <action
             android:id="@+id/action_gifsFragment_to_gifDetailsFragment"
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/gif_details_fragment_dest"
-        android:name="com.github.david402.githubsearchdemo.GifDetailsFragment"
+        android:name="com.github.david402.giphydemo.GifDetailsFragment"
         android:label="Gif Details">
         <action
             android:id="@+id/action_gifDetailsFragment_to_gifsFragment"

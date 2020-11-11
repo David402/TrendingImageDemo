@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import org.junit.Test
 

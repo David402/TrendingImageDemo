@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo.data
+package com.github.david402.giphydemo.data
 
 import retrofit2.http.Field
 

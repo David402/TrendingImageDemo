@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

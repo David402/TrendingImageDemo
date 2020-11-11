@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory

@@ -1,16 +1,12 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import android.accounts.NetworkErrorException
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
-import com.github.david402.githubsearchdemo.data.GifObject
+import com.github.david402.giphydemo.data.GifObject
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 sealed class SearchResult
 class ValidResult(val result: List<GifObject>) : SearchResult()

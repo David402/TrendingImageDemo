@@ -1,4 +1,4 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 object Configs {
 //    val API_KEY = "dc6zaTOxFJmzC"

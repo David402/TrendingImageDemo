@@ -7,10 +7,10 @@
 
         <variable
             name="gif"
-            type="com.github.david402.githubsearchdemo.data.GifObject" />
+            type="com.github.david402.giphydemo.data.GifObject" />
         <variable
             name="viewmodel"
-            type="com.github.david402.githubsearchdemo.SearchViewModel" />
+            type="com.github.david402.giphydemo.SearchViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
