@@ -20,24 +20,13 @@ class SearchViewModel(
     private val giphyRepository: GiphyRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
+
     companion object {
         const val SEARCH_DELAY_MS = 100L
         const val MIN_QUERY_LENGTH = 3
     }
 
-    private val _forceUpdate = MutableLiveData<Boolean>(false)
-    private val _items: LiveData<List<GifObject>> = _forceUpdate.switchMap { forceUpdate ->
-        if (forceUpdate) {
-            _dataLoading.value = true
-
-            viewModelScope.launch {
-                giphyRepository.updateTrendingGifs()
-                _dataLoading.value = false
-            }
-        }
-        giphyRepository.observeGifs()
-    }
-
+    private val _items: LiveData<List<GifObject>> = giphyRepository.observeGifs()
 
     val items: LiveData<List<GifObject>> = _items
 
@@ -48,10 +37,14 @@ class SearchViewModel(
 
     @ExperimentalCoroutinesApi
     @VisibleForTesting
-    internal val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
+    internal val queryChannel = ConflatedBroadcastChannel<String>()
 
-    fun refresh() {
-        _forceUpdate.value = true
+    fun refresh() = runBlocking{
+        _dataLoading.value = true
+        viewModelScope.launch {
+            giphyRepository.updateTrendingGifs()
+            _dataLoading.value = false
+        }
     }
 
     fun selectGif(id: String) {
@@ -67,38 +60,34 @@ class SearchViewModel(
         .mapLatest {
             try {
                 if (it.length >= MIN_QUERY_LENGTH) {
-                    withContext(ioDispatcher) {
+                    _dataLoading.value = true
+                    viewModelScope.launch {
+//                    withContext(ioDispatcher) {
                         giphyRepository.searchGifs(it)
+                        _dataLoading.value = false
                     }
-//                    println("Search result: ${searchResult.size} hits")
-
-//                    if (searchResult.isNotEmpty()) {
-//                        ValidResult(searchResult)
-//                    } else {
-//                        EmptyResult
-//                    }
                 } else {
-                    EmptyQuery
                 }
             } catch (e: Throwable) {
-                if (e is CancellationException) {
-                    println("Search was cancelled!")
-                    throw e
-                } else if (e is NetworkErrorException) {
-                    println("Search rate limit exceeded!")
-                    RateLimitError(e)
-                } else {
-                    ErrorResult(e)
-                }
+//                when (e) {
+//                    is CancellationException -> {
+//                        println("Search was cancelled!")
+//                        throw e
+//                    }
+//                    is NetworkErrorException -> {
+//                        println("Search rate limit exceeded!")
+//                        RateLimitError(e)
+//                    }
+//                    else -> {
+//                        ErrorResult(e)
+//                    }
+//                }
+                giphyRepository.observeGifs()
             }
         }
-        .catch { emit(TerminalError) }
+        .catch { emit(giphyRepository.observeGifs()) }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     val searchResult = internalSearchResult.asLiveData()
-
-    fun handleSearchResult(items: List<GifObject>) {
-
-    }
 }

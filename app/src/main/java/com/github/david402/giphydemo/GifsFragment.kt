@@ -39,22 +39,21 @@ class GifsFragment : Fragment() {
             viewmodel = viewModel
         }
         setHasOptionsMenu(true)
-//        viewModel.searchResult.observe(this) { handleSearchResult(it) }
+        viewModel.searchResult.observe(this) {}
 
         // Start with empty query view
-//        searchAdapter.submitList(emptyList())
         binding.otherResultText.visibility = View.VISIBLE
         binding.searchResult.visibility = View.GONE
         binding.otherResultText.setText(R.string.not_enough_characters)
         binding.searchText.requestFocus()
 
         binding.searchText.doAfterTextChanged { editable ->
-            //            binding.progressHorizontal.visibility = View.VISIBLE
             lifecycleScope.launch {
                 viewModel.queryChannel.send(editable.toString())
             }
         }
 
+        // Handle items changed
         viewModel.items.observe(this) {
             if (it.isNotEmpty()) {
                 binding.otherResultText.visibility = View.GONE
@@ -65,6 +64,8 @@ class GifsFragment : Fragment() {
             }
             searchAdapter.submitList(it)
         }
+
+        // Handle loading progress indicator changed
         viewModel.dataLoading.observe(this) { isDownloading ->
             if (isDownloading) {
                 binding.progressHorizontal.visibility = View.VISIBLE
@@ -84,9 +85,9 @@ class GifsFragment : Fragment() {
     }
 
     private fun setupListAdapter() {
-        val videModel = binding.viewmodel
-        if (videModel != null) {
-            searchAdapter = SearchAdapter(videModel)
+        val viewModel = binding.viewmodel
+        if (viewModel != null) {
+            searchAdapter = SearchAdapter(viewModel)
             binding.searchResult.adapter = searchAdapter
         }
     }
@@ -95,9 +96,6 @@ class GifsFragment : Fragment() {
         viewModel.openGifEvent.observe(viewLifecycleOwner, EventObserver {
             openGifDetails(it)
         })
-//        viewModel.newTaskEvent.observe(this, EventObserver {
-//            navigateToAddNewTask()
-//        })
     }
 
     private fun openGifDetails(id: String) {

@@ -1,9 +1,9 @@
-package com.github.david402.githubsearchdemo
+package com.github.david402.giphydemo
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.david402.githubsearchdemo.data.GifObject
+import com.github.david402.giphydemo.data.GifObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
